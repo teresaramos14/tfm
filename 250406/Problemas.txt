@@ -1,0 +1,5 @@
+-No encuentro un ajuste de cv2.GaussianBlur para recortar la placa
+que pueda detectar todas las placas por igual, algunas imagenes 
+necesitan (15,15) y otras (9,9). Las imágenes p44 y p6 no detecta la placa.
+
+-En el recorte de los callos de p14 no los pilla enteros.
