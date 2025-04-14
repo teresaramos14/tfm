@@ -3,10 +3,6 @@ import numpy as np
 import os
 import csv
 
-
-#ahora detecta más placas que no hacia antes, pero no me detecta p165 y p79 que si las detectaba antes. P8 y p6 sigue sin detectarlas, pero creo
-#que tiene lineas discontinuas dentro no va a detectar bien las celdas 
-
 # Función para cargar y convertir la imagen
 def load_image(image_path, convert_rgb=True):
     image = cv2.imread(image_path)
@@ -17,8 +13,10 @@ def load_image(image_path, convert_rgb=True):
 # Función para segmentar la placa de Petri
 def segment_petri_dish(image, debug=False):
     gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    blurred = cv2.GaussianBlur(gray, (7, 7), 0)
-    edges = cv2.Canny(blurred, 20, 80)
+    
+    # Más blur para suavizar bordes y que cierre mejor el contorno
+    blurred = cv2.GaussianBlur(gray, (9, 9), 0)
+    edges = cv2.Canny(blurred, 20, 100)
 
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
@@ -26,30 +24,35 @@ def segment_petri_dish(image, debug=False):
     for contour in contours:
         area = cv2.contourArea(contour)
         if area < 10000:
-            continue  # ignorar cosas pequeñas
+            continue
 
-        # Aproximación al contorno (permitiendo esquinas redondeadas)
         epsilon = 0.02 * cv2.arcLength(contour, True)
         approx = cv2.approxPolyDP(contour, epsilon, True)
 
-        # Filtro: ¿es suficientemente rectangular?
-        x, y, w, h = cv2.boundingRect(approx)
-        aspect_ratio = w / h
+        if 4 <= len(approx) <= 8:
+            x, y, w, h = cv2.boundingRect(approx)
+            aspect_ratio = w / h
+            if 0.6 < aspect_ratio < 1.4:
+                cropped = image[y:y+h, x:x+w]
 
-        if 0.7 < aspect_ratio < 1.2:  # Aceptamos forma casi cuadrada
-            cropped = image[y:y+h, x:x+w]
+                if debug:
+                    debug_img = image.copy()
+                    cv2.drawContours(debug_img, [approx], -1, (0, 255, 0), 2)
+                    cv2.imshow("Placa detectada (híbrido)", debug_img)
+                    cv2.waitKey(5)
+                    cv2.destroyAllWindows()
 
-            if debug:
-                debug_image = image.copy()
-                cv2.drawContours(debug_image, [approx], -1, (255, 0, 0), 3)
-                cv2.imshow("Placa detectada", debug_image)
-                cv2.waitKey(5)
-                cv2.destroyAllWindows()
+                return cropped, approx, (x, y, w, h)
 
-            return cropped, approx, (x, y, w, h)
+    # Último recurso: usar el contorno más grande
+    if contours:
+        petri_contour = contours[0]
+        epsilon = 0.02 * cv2.arcLength(petri_contour, True)
+        approx = cv2.approxPolyDP(petri_contour, epsilon, True)
+        x, y, w, h = cv2.boundingRect(petri_contour)
+        return image[y:y+h, x:x+w], approx, (x, y, w, h)
 
     return None, None, None
-
 
 # Función para aplicar umbral adaptativo y operación de cierre
 def preprocess_image(image):
