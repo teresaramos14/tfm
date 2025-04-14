@@ -3,6 +3,10 @@ import numpy as np
 import os
 import csv
 
+
+#ahora detecta más placas que no hacia antes, pero no me detecta p165 y p79 que si las detectaba antes. P8 y p6 sigue sin detectarlas, pero creo
+#que tiene lineas discontinuas dentro no va a detectar bien las celdas 
+
 # Función para cargar y convertir la imagen
 def load_image(image_path, convert_rgb=True):
     image = cv2.imread(image_path)
