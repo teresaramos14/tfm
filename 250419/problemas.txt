@@ -1,0 +1,74 @@
+-p23: salen bien, pero hay dos callos que no separa porque están demasiado juntos y no hay diferencia entre ellos. 
+Con el fondo original se puden ver trozos de otros callos, y he probado ponerle el fondo negro, pero se pierden
+algunos colores claros del callo.
+
+-p69:Dos callos están tocando la línea que delimita las celdas en la placa de petri, entonces creo que por eso
+los pilla juntos porque la línea los une como si fuese un callo. Pero si dejo menos margen y quito las líneas
+los callos que se están encima o tocando las líneas se cortan.
+
+-p71: salen bien, pero para el último callo salen las líneas de la celda de la placa, y si quito margen
+se corta callo.
+
+-p81: bien, pero en algunas imágenes sale un poco de otros callos.
+
+-p85: bien, pero el último callo creo que al estar pegado a la línea negra lo toma como parte del callo y 
+sale el recorte no es exactamente el callo.
+
+-p89: la mayoría de los callos están muy pegados, entonces los detecta como 1 pero son unos cuantos.
+
+-p93: hay 4 callos muy pegados que los detecta como uno solo.
+
+-p101: dos los detecta como junto pq están muy pegados y también por la línea negra.
+
+-p107: variosestán pegados y otro no lo detecta, creo que porque se sale del rango de la celda...
+
+-p111: en algunos casos, las zonas muy claras no las detecta como parte del callo, entonces corta el callo ahí
+y lo deja a medias. En el código he puesto para que la detección de las celdas que sean de media
+de color más claro lo haga de otra forma, pero a veces no sirve porque la media es de callo oscuro ya que la
+parte clara es muy pequeña.
+
+-p114: Hay dos callos que los saca junto con la línea divisoria de la celda porque están sobre ella.
+
+-p121: dos callos muy juntos se detectan como uno solo, y un callo están pegado a la línea y lo recorta con esta.
+
+-p130: algunos muy pegados y con línea
+
+-p133: algunos muy pegados y con línea
+
+-p154: bien
+
+-p164: no saca los tres callos de la última fila pegados a la línea como separados
+
+-p181: hay un callo que tiene una parte clarita que no detecta entonces sale dividido, ya que la parte final es oscura
+y la detecta como un callo independiente.
+
+-p183: igual que el anterior, tiene algunas parte claras que hacen que el callo se divida y se detecten trozos.
+
+-p193: igual que p183
+
+
+Problemas: 
+-callos con partes claras: cuando ajusto en la detección de callos oscuros (
+
+if mean_intensity < 136:
+            print("[INFO] Detección de callos oscuros.")
+            _, thresh = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)
+            contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+con otro thresh no sale bien. Pero si ajusto la mean intensity, tampoco sale bien, o no sale bien para
+otras imágenes.
+
+-líneas divisorias de la celda: si ajusto con menos margen para que no salgan deja callos a la mitad
+porque no formarían parte de la celda, o ni siquiera los detecta.
+
+-Callos pegados: no sé que hacer con ellos.
+
+-Hay algunas placas que no detecta, hay detectadas 19 de 25.
+
+He pensado ir cortando los callos con el código que les vaya mejor, ajustando me a sus características específicas, en 
+vez de tener uno general para todas. 
+
+
+
+
+
