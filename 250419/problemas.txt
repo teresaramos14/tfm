@@ -4,7 +4,7 @@ algunos colores claros del callo.
 
 -p69:Dos callos están tocando la línea que delimita las celdas en la placa de petri, entonces creo que por eso
 los pilla juntos porque la línea los une como si fuese un callo. Pero si dejo menos margen y quito las líneas
-los callos que se están encima o tocando las líneas se cortan.
+los callos que  están encima o tocando las líneas se cortan.
 
 -p71: salen bien, pero para el último callo salen las líneas de la celda de la placa, y si quito margen
 se corta callo.
@@ -12,7 +12,7 @@ se corta callo.
 -p81: bien, pero en algunas imágenes sale un poco de otros callos.
 
 -p85: bien, pero el último callo creo que al estar pegado a la línea negra lo toma como parte del callo y 
-sale el recorte no es exactamente el callo.
+ el recorte no es exactamente el callo.
 
 -p89: la mayoría de los callos están muy pegados, entonces los detecta como 1 pero son unos cuantos.
 
@@ -65,7 +65,7 @@ porque no formarían parte de la celda, o ni siquiera los detecta.
 
 -Hay algunas placas que no detecta, hay detectadas 19 de 25.
 
-He pensado ir cortando los callos con el código que les vaya mejor, ajustando me a sus características específicas, en 
+He pensado ir cortando los callos con el código que les vaya mejor, ajustandome a sus características específicas, en 
 vez de tener uno general para todas. 
 
 
